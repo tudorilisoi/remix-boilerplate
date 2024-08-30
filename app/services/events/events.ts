@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-// structure for a blog post
+// structure for a blog event
 export const postCreateSchema = z.object({
   title: z
     .string({ required_error: 'Title is required' })

@@ -40,8 +40,8 @@ export async function loader(args: LoaderFunctionArgs) {
       eventId,
     }
   }
-  const post = await getEvent({ userId, id: eventId })
-  const data = { userId, post, eventId }
+  const event = await getEvent({ userId, id: eventId })
+  const data = { userId, event, eventId }
   return json(data)
 }
 
@@ -111,7 +111,7 @@ export default function UpsertEvent() {
   }
 
   return (
-    <Form method="post" {...getFormProps(form)}>
+    <Form method="event" {...getFormProps(form)}>
       <div>{form.errors}</div>
 
       {!data.eventId ? null : (
