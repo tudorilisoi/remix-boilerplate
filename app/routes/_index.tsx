@@ -32,7 +32,7 @@ export default function Index() {
 
   return (
     <div>
-      <h1 className="bg-primary">Welcome to Remix</h1>
+      <h1 className="not-prose font-extrabold text-2xl text-base-content">Welcome to Remix</h1>
       
       <div>
         <SignedIn>

@@ -117,6 +117,8 @@ export default function UpsertEvent() {
   const isNew = !data.eventId
 
   return (
+    <>
+     <h1 className="not-prose font-extrabold text-2xl text-base-content">{isNew?'Create event':'Update event'}</h1>
     <Form method="post" {...getFormProps(form)}>
       <div>{form.errors}</div>
 
@@ -146,5 +148,6 @@ export default function UpsertEvent() {
       </div>
       <button className="btn btn-lg btn-secondary btn-block mt-4">{isNew?'Create':'Update'}</button>
     </Form>
+    </>
   )
 }

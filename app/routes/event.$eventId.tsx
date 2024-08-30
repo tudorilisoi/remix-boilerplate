@@ -35,7 +35,7 @@ export default function EventPage() {
 
   return (
     <div>
-      <h1 className="bg-primary">{event.title}</h1>
+      <h1 className="not-prose font-extrabold text-2xl text-base-content">{event.title}</h1>
       <div>{event.body}</div>
       <img
         alt={event.title}
