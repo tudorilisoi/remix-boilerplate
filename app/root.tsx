@@ -1,6 +1,6 @@
 // @see https://remix.run/docs/en/main/future/vite#fix-up-css-imports
-import { roRO } from '@clerk/localizations'
-import { ClerkApp } from '@clerk/remix'
+import { enUS } from '@clerk/localizations'
+import { ClerkApp, SignedIn, SignedOut, UserButton } from '@clerk/remix'
 import { rootAuthLoader } from '@clerk/remix/ssr.server'
 import { LinksFunction, LoaderFunction } from '@remix-run/node'
 import {
@@ -9,12 +9,12 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration,
+  ScrollRestoration
 } from '@remix-run/react'
+import logo from '~/assets/revent-logo.svg'
 import '~/css/fonts.css'
 import '~/css/init.css'
 import stylesheet from '~/css/tailwind.css?url'
-import logo from '~/assets/revent-logo.svg'
 
 export const loader: LoaderFunction = args => rootAuthLoader(args)
 
@@ -42,13 +42,22 @@ const NavBar = () => {
         <div className="flex-none gap-2 mr-2 text-base-content">
           <Link to={'/events/upsert'}>{'Create event'}</Link>
         </div>
-        <div className="flex-none gap-2">{`Cont`}</div>
+        <div className="flex-none gap-2">
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+          <SignedOut>
+            <Link to="/sign-in">Sign in</Link>
+          </SignedOut>
+        </div>
       </div>
     </header>
   )
 }
 
-export function Layout({ children }: { children: React.ReactNode }) {
+// NOTE exporting this as Layout does not wrap with the ClerkApp
+
+export function XLayout({ children }: { children: React.ReactNode }) {
   // NOTE extensions, Adsense et. al. manipulate the document
   // so using suppressHydrationWarning workaround
   return (
@@ -97,9 +106,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
   )
 }
 
+// NOTE manually wrap with the XLayout
 function RemixApp() {
-  return <Outlet />
+  return (
+    <XLayout>
+      <Outlet />
+    </XLayout>
+  )
 }
 
-const App = ClerkApp(RemixApp, { localization: roRO })
+const App = ClerkApp(RemixApp, { localization: enUS })
 export default App

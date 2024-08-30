@@ -4,7 +4,7 @@ import {
   type LoaderFunctionArgs,
   type MetaFunction,
 } from '@remix-run/node'
-import { Link } from '@remix-run/react'
+import { Link, useLoaderData } from '@remix-run/react'
 import { getUserId } from '~/services/auth.server'
 import { getEvents } from '~/services/events/events.server'
 
@@ -28,22 +28,18 @@ export async function loader(args: LoaderFunctionArgs) {
 }
 
 export default function Index() {
-  // const data = useLoaderData<typeof loader>()
+  const data = useLoaderData<typeof loader>()
 
   return (
     <div>
-      <h1 className="not-prose font-extrabold text-2xl text-base-content">Welcome to Remix</h1>
-      
-      <div>
-        <SignedIn>
-          <h1>Index route</h1>
-          <p>You are signed in!</p>
-          <UserButton />
-        </SignedIn>
-        <SignedOut>
-          <Link to="/sign-in">Sign in</Link>
-        </SignedOut>
-      </div>
+      <h1 className="not-prose font-extrabold text-2xl text-base-content">
+        Welcome to Remix
+      </h1>
+      {data.events.map(event => (
+        <>
+          <li key={event.id}>{event.title}</li>
+        </>
+      ))}
     </div>
   )
 }
