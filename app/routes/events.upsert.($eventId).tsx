@@ -60,10 +60,11 @@ export async function action(args: ActionFunctionArgs) {
   try {
     if (eventId) {
       await updateEvent({ ...submission.value, userId, id: eventId })
+      return redirect(`/event/${eventId}`)
     } else {
-      await createEvent({ ...submission.value, userId })
+      const newEvent = await createEvent({ ...submission.value, userId })
+      return redirect(`/event/${newEvent.id}`)
     }
-    return redirect('/zz')
   } catch (error) {
     let message = 'Failed to save. Please try again later.'
     if (error instanceof PrismaClientKnownRequestError) {

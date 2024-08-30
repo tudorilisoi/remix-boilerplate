@@ -52,9 +52,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <footer className="bg-base-200  fix-scroll">
             <div className="container mx-auto py-4 px-6">
               {/* Add your footer content here */}
-              <p className="text-base-content font-extrabold">
-                © {new Date().getFullYear()}{' '}
-                <Link to={'/'}>{'REvents'}</Link>
+              <p className="text-base-content font-extrabold flex">
+                <span className="mr-2">© {new Date().getFullYear()}</span>
+                <Link className="mr-2" to={'/'}>{'REvents'}</Link>
+                <Link to={'/events/upsert'}>{'Create event'}</Link>
               </p>
             </div>
           </footer>
