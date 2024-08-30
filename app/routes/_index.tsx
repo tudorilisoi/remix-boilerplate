@@ -18,13 +18,13 @@ export const meta: MetaFunction = () => {
 export async function loader(args: LoaderFunctionArgs) {
   const userId = await getUserId(args)
   console.log(`🚀 ~ loader ~ userId:`, userId)
-  const event = await getEvents({ userId })
-  console.log(`🚀 ~ loader ~ event:`, event)
+  const events = await getEvents({ userId })
+  console.log(`🚀 ~ loader ~ events:`, events)
 
-  if (!event) {
+  if (!events) {
     throw new Response('Not Found', { status: 404 })
   }
-  return json({ event, userId })
+  return json({ events, userId })
 }
 
 export default function Index() {
