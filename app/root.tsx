@@ -54,7 +54,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               {/* Add your footer content here */}
               <p className="text-base-content font-extrabold">
                 © {new Date().getFullYear()}{' '}
-                <Link to={'/'}>{'eRădăuţi v3'}</Link>
+                <Link to={'/'}>{'REvents'}</Link>
               </p>
             </div>
           </footer>
