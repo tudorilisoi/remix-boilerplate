@@ -32,23 +32,23 @@ export async function loader(args: LoaderFunctionArgs) {
     return redirect(redirectUrl, { status: 302 })
   }
 
-  const { postId } = args.params
-  if (!postId) {
+  const { eventId } = args.params
+  if (!eventId) {
     return {
       userId,
       event: null,
-      postId,
+      eventId,
     }
   }
-  const post = await getEvent({ userId, id: postId })
-  const data = { userId, post, postId }
+  const post = await getEvent({ userId, id: eventId })
+  const data = { userId, post, eventId }
   return json(data)
 }
 
 export async function action(args: ActionFunctionArgs) {
   const { request } = args
-  const { postId } = args.params
-  const schema = postId ? postUpdateSchema : postCreateSchema
+  const { eventId } = args.params
+  const schema = eventId ? postUpdateSchema : postCreateSchema
   const userId = await getUserId(args)
   const formData = await request.formData()
   const submission = parseWithZod(formData, { schema })
@@ -58,8 +58,8 @@ export async function action(args: ActionFunctionArgs) {
   }
 
   try {
-    if (postId) {
-      await updateEvent({ ...submission.value, userId, id: postId })
+    if (eventId) {
+      await updateEvent({ ...submission.value, userId, id: eventId })
     } else {
       await createEvent({ ...submission.value, userId })
     }
@@ -84,7 +84,7 @@ export default function UpsertEvent() {
 
   let schema: typeof postCreateSchema | typeof postUpdateSchema =
     postUpdateSchema
-  if (!data.postId) {
+  if (!data.eventId) {
     schema = postCreateSchema
   }
   const [form, fields] = useForm({
@@ -114,7 +114,7 @@ export default function UpsertEvent() {
     <Form method="post" {...getFormProps(form)}>
       <div>{form.errors}</div>
 
-      {!data.postId ? null : (
+      {!data.eventId ? null : (
         <input {...getInputProps(fields?.id, { type: 'hidden' })} />
       )}
       <div>

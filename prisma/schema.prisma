@@ -4,27 +4,27 @@
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 datasource db {
-    provider = "postgresql"
-    url = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 model User {
-    id String @id()
+  id String @id()
 }
 
 /// @@allow('read', true)
 /// @@allow('all', authorId == auth().id)
 model Event {
-    id String @id() @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt()
-    /// @length(1, 256)
-    title String
-    body String
-    published Boolean @default(false)
-    authorId String
+  id        String   @id() @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+  /// @length(1, 256)
+  title     String
+  body      String
+  published Boolean  @default(false)
+  authorId  String
 }
