@@ -6,13 +6,13 @@ import { useLoaderData } from '@remix-run/react'
 import { FC } from 'react'
 
 import { getUserId } from '~/services/auth.server'
-import { getPosts } from '~/services/post/post.server'
+import { getEvents } from '~/services/events/events.server'
 
 
 export async function loader(args: LoaderFunctionArgs) {
   const userId = await getUserId(args)
-  const posts = await getPosts({ userId })
-  const data = { userId, posts }
+  const events = await getEvents({ userId })
+  const data = { userId, events }
   return json(data)
 }
 

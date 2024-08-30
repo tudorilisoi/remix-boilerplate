@@ -4,11 +4,11 @@ import { z } from 'zod'
 export const postCreateSchema = z.object({
   title: z
     .string({ required_error: 'Title is required' })
-    .min(10, 'Title is too short'),
+    .min(4, 'Title is too short'),
   body: z
-    .string({ required_error: 'Body is required' })
-    .min(10, 'Message is too short')
-    .max(15, 'Message is too long'),
+    .string({ required_error: 'Description is required' })
+    .min(10, 'Description is too short')
+    .max(2048, 'Description is too long'),
 })
 
 export const postUpdateSchema = postCreateSchema.merge(

@@ -18,7 +18,7 @@ model User {
 
 /// @@allow('read', true)
 /// @@allow('all', authorId == auth().id)
-model Post {
+model Event {
     id String @id() @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt()

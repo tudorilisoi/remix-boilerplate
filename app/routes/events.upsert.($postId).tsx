@@ -14,9 +14,9 @@ import {
 import { Form, useActionData, useLoaderData } from '@remix-run/react'
 
 import { getUserId } from '~/services/auth.server'
-import { createPost, getPost, updatePost } from '~/services/post/post.server'
+import { createEvent, getEvent, updateEvent } from '~/services/events/events.server'
 
-import { postCreateSchema, postUpdateSchema } from '~/services/post/post'
+import { postCreateSchema, postUpdateSchema } from '~/services/events/events'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 export async function loader(args: LoaderFunctionArgs) {
@@ -40,7 +40,7 @@ export async function loader(args: LoaderFunctionArgs) {
       postId,
     }
   }
-  const post = await getPost({ userId, id: postId })
+  const post = await getEvent({ userId, id: postId })
   const data = { userId, post, postId }
   return json(data)
 }
@@ -59,9 +59,9 @@ export async function action(args: ActionFunctionArgs) {
 
   try {
     if (postId) {
-      await updatePost({ ...submission.value, userId, id: postId })
+      await updateEvent({ ...submission.value, userId, id: postId })
     } else {
-      await createPost({ ...submission.value, userId })
+      await createEvent({ ...submission.value, userId })
     }
     return redirect('/zz')
   } catch (error) {
@@ -78,7 +78,7 @@ export async function action(args: ActionFunctionArgs) {
   }
 }
 
-export default function UpsertPost() {
+export default function UpsertEvent() {
   const data = useLoaderData<typeof loader>()
   const lastResult = useActionData<typeof action>()
 
@@ -88,7 +88,7 @@ export default function UpsertPost() {
     schema = postCreateSchema
   }
   const [form, fields] = useForm({
-    defaultValue: data.post || {},
+    defaultValue: data.event || {},
     lastResult,
     constraint: getZodConstraint(schema),
     shouldValidate: 'onBlur',

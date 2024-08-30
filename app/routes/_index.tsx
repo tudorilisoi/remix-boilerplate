@@ -7,7 +7,7 @@ import {
 import { Link } from '@remix-run/react'
 import { ClientQRCode } from '~/lib/QRCode'
 import { getUserId } from '~/services/auth.server'
-import { getPosts } from '~/services/post/post.server'
+import { getEvents } from '~/services/events/events.server'
 
 export const meta: MetaFunction = () => {
   return [
@@ -19,7 +19,7 @@ export const meta: MetaFunction = () => {
 export async function loader(args: LoaderFunctionArgs) {
   const userId = await getUserId(args)
   console.log(`🚀 ~ loader ~ userId:`, userId)
-  const post = await getPosts({ userId })
+  const post = await getEvents({ userId })
   console.log(`🚀 ~ loader ~ post:`, post)
 
   if (!post) {
