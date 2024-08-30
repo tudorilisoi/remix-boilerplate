@@ -5,7 +5,6 @@ import {
   type MetaFunction,
 } from '@remix-run/node'
 import { Link } from '@remix-run/react'
-import { ClientQRCode } from '~/lib/QRCode'
 import { getUserId } from '~/services/auth.server'
 import { getEvents } from '~/services/events/events.server'
 
@@ -34,9 +33,7 @@ export default function Index() {
   return (
     <div>
       <h1 className="bg-primary">Welcome to Remix</h1>
-      <div style={{ background: 'white', padding: '0px', height:'128px' }}>
-        <ClientQRCode size={128} value="https://www.google.com" />
-      </div>
+      
       <div>
         <SignedIn>
           <h1>Index route</h1>

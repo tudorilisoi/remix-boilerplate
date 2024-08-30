@@ -1,13 +1,11 @@
-import { SignedIn, SignedOut, UserButton } from '@clerk/remix'
 import {
   json,
   type LoaderFunctionArgs,
   type MetaFunction,
 } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
-import { ClientQRCode } from '~/lib/QRCode'
 import { getUserId } from '~/services/auth.server'
-import { getEvent, getEvents } from '~/services/events/events.server'
+import { getEvent } from '~/services/events/events.server'
 
 export const meta: MetaFunction = () => {
   return [
@@ -19,6 +17,9 @@ export const meta: MetaFunction = () => {
 export async function loader(args: LoaderFunctionArgs) {
   const userId = await getUserId(args)
   const { eventId } = args.params
+  if (!eventId) {
+    throw new Response('Bad request', { status: 400 })
+  }
   console.log(`🚀 ~ loader ~ userId:`, userId)
   const event = await getEvent({ id: eventId, userId })
   console.log(`🚀 ~ loader ~ event:`, event)
@@ -36,6 +37,11 @@ export default function EventPage() {
     <div>
       <h1 className="bg-primary">{event.title}</h1>
       <div>{event.body}</div>
+      <img
+        alt={event.title}
+        className="h-[128px]"
+        src={`/event-qr/${event.id}.svg`}
+      />
       <Link to={`/events/upsert/${event.id}`}>{'Update event'}</Link>
     </div>
   )
