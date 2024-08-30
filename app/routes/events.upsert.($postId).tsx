@@ -36,7 +36,7 @@ export async function loader(args: LoaderFunctionArgs) {
   if (!postId) {
     return {
       userId,
-      post: null,
+      event: null,
       postId,
     }
   }

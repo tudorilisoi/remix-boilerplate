@@ -20,7 +20,7 @@ export async function loader(args: LoaderFunctionArgs) {
   const userId = await getUserId(args)
   console.log(`🚀 ~ loader ~ userId:`, userId)
   const post = await getEvents({ userId })
-  console.log(`🚀 ~ loader ~ post:`, post)
+  console.log(`🚀 ~ loader ~ event:`, post)
 
   if (!post) {
     throw new Response('Not Found', { status: 404 })
