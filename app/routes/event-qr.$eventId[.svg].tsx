@@ -7,7 +7,6 @@ export async function loader(args: LoaderFunctionArgs) {
     const eventURL = `${url.origin}/event/${eventId}`
     try {
         const qr = await generateQRCode(eventURL)
-        console.log(`🚀 ~ loader ~ qr:`, qr)
         return new Response(qr as string, {
           status: 200,
           headers: {
