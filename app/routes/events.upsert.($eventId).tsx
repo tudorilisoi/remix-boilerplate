@@ -111,7 +111,7 @@ export default function UpsertEvent() {
   }
 
   return (
-    <Form method="event" {...getFormProps(form)}>
+    <Form method="post" {...getFormProps(form)}>
       <div>{form.errors}</div>
 
       {!data.eventId ? null : (
