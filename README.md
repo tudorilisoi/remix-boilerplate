@@ -1,3 +1,7 @@
+# TODO
+
+- maybe implement infinite scrolling https://gist.github.com/ptenteromano/e42fe33622a26ba3fdd49b51109203c7
+
 # Welcome to Remix + Vite!
 
 📖 See the [Remix docs](https://remix.run/docs) and the [Remix Vite docs](https://remix.run/docs/en/main/future/vite) for details on supported features.
