@@ -1,15 +1,11 @@
-import {
-  RedirectToSignIn,
-  SignedIn,
-  SignedOut,
-  UserButton
-} from '@clerk/remix'
+import { SignedIn, SignedOut, UserButton } from '@clerk/remix'
 import {
   json,
   type LoaderFunctionArgs,
   type MetaFunction,
 } from '@remix-run/node'
-import { Link, useLoaderData } from '@remix-run/react'
+import { Link } from '@remix-run/react'
+import { ClientQRCode } from '~/lib/QRCode'
 import { getUserId } from '~/services/auth.server'
 import { getPosts } from '~/services/post/post.server'
 
@@ -33,12 +29,14 @@ export async function loader(args: LoaderFunctionArgs) {
 }
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>()
+  // const data = useLoaderData<typeof loader>()
 
   return (
     <div>
       <h1 className="bg-primary">Welcome to Remix</h1>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <div style={{ background: 'white', padding: '16px' }}>
+        <ClientQRCode size={128} value="https://www.google.com" />
+      </div>
       <div>
         <SignedIn>
           <h1>Index route</h1>
