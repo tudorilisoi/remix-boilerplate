@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 // structure for a blog event
-export const postCreateSchema = z.object({
+export const eventCreateSchema = z.object({
   title: z
     .string({ required_error: 'Title is required' })
     .min(4, 'Title is too short'),
@@ -11,7 +11,7 @@ export const postCreateSchema = z.object({
     .max(2048, 'Description is too long'),
 })
 
-export const postUpdateSchema = postCreateSchema.merge(
+export const eventUpdateSchema = eventCreateSchema.merge(
   z.object({
     id: z.string(),
   }),

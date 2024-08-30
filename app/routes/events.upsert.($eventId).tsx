@@ -16,7 +16,7 @@ import { Form, useActionData, useLoaderData } from '@remix-run/react'
 import { getUserId } from '~/services/auth.server'
 import { createEvent, getEvent, updateEvent } from '~/services/events/events.server'
 
-import { postCreateSchema, postUpdateSchema } from '~/services/events/events'
+import { eventCreateSchema, eventUpdateSchema } from '~/services/events/events'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 export async function loader(args: LoaderFunctionArgs) {
@@ -48,7 +48,7 @@ export async function loader(args: LoaderFunctionArgs) {
 export async function action(args: ActionFunctionArgs) {
   const { request } = args
   const { eventId } = args.params
-  const schema = eventId ? postUpdateSchema : postCreateSchema
+  const schema = eventId ? eventUpdateSchema : eventCreateSchema
   const userId = await getUserId(args)
   const formData = await request.formData()
   const submission = parseWithZod(formData, { schema })
@@ -82,10 +82,10 @@ export default function UpsertEvent() {
   const data = useLoaderData<typeof loader>()
   const lastResult = useActionData<typeof action>()
 
-  let schema: typeof postCreateSchema | typeof postUpdateSchema =
-    postUpdateSchema
+  let schema: typeof eventCreateSchema | typeof eventUpdateSchema =
+    eventUpdateSchema
   if (!data.eventId) {
-    schema = postCreateSchema
+    schema = eventCreateSchema
   }
   const [form, fields] = useForm({
     defaultValue: data.event || {},

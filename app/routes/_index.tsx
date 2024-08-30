@@ -34,7 +34,7 @@ export default function Index() {
   return (
     <div>
       <h1 className="bg-primary">Welcome to Remix</h1>
-      <div style={{ background: 'white', padding: '16px' }}>
+      <div style={{ background: 'white', padding: '0px', height:'128px' }}>
         <ClientQRCode size={128} value="https://www.google.com" />
       </div>
       <div>
