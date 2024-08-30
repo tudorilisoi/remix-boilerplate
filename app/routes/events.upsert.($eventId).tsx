@@ -14,7 +14,11 @@ import {
 import { Form, useActionData, useLoaderData } from '@remix-run/react'
 
 import { getUserId } from '~/services/auth.server'
-import { createEvent, getEvent, updateEvent } from '~/services/events/events.server'
+import {
+  createEvent,
+  getEvent,
+  updateEvent,
+} from '~/services/events/events.server'
 
 import { eventCreateSchema, eventUpdateSchema } from '~/services/events/events'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
@@ -110,12 +114,13 @@ export default function UpsertEvent() {
   const getErrorProps = (fieldName: fieldKeys) => {
     return fields[fieldName].errors ? errorProps : {}
   }
+  const isNew = !data.eventId
 
   return (
     <Form method="post" {...getFormProps(form)}>
       <div>{form.errors}</div>
 
-      {!data.eventId ? null : (
+      {isNew ? null : (
         <input {...getInputProps(fields?.id, { type: 'hidden' })} />
       )}
       <div>
@@ -139,7 +144,7 @@ export default function UpsertEvent() {
           {fields.body.errors}
         </div>
       </div>
-      <button className="btn btn-lg btn-secondary btn-block mt-4">Send</button>
+      <button className="btn btn-lg btn-secondary btn-block mt-4">{isNew?'Create':'Update'}</button>
     </Form>
   )
 }
