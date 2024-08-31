@@ -1,4 +1,3 @@
-import { SignedIn, SignedOut, UserButton } from '@clerk/remix'
 import {
   json,
   type LoaderFunctionArgs,

@@ -118,37 +118,45 @@ export default function UpsertEvent() {
 
   return (
     <>
-     <h1 className="not-prose font-extrabold text-2xl text-base-content">{isNew?'Create event':'Update event'}</h1>
-    <Form method="post" {...getFormProps(form)}>
-      <div>{form.errors}</div>
-
-      {isNew ? null : (
-        <input {...getInputProps(fields?.id, { type: 'hidden' })} />
-      )}
-      <div>
-        <label {...labelProps} htmlFor={fields.title.id}>
-          Title
-        </label>
-        <input {...getInputProps(fields.title, { type: 'text' })} className="input-bordered bg-base-200 focus:outline-secondary-focus block w-full p-1" />
-        <div {...getErrorProps('title')} id={fields.title.errorId}>
-          {fields.title.errors}
-        </div>
+      <h1 className="not-prose font-extrabold text-2xl text-base-content">
+        {isNew ? 'Create event' : 'Update event'}
+      </h1>
+      <div className="prose">
+        <Form method="post" {...getFormProps(form)}>
+          <div>{form.errors}</div>
+          {isNew ? null : (
+            <input {...getInputProps(fields?.id, { type: 'hidden' })} />
+          )}
+          <div>
+            <label {...labelProps} htmlFor={fields.title.id}>
+              Title
+            </label>
+            <input
+              {...getInputProps(fields.title, { type: 'text' })}
+              className="input-bordered bg-base-200 focus:outline-secondary-focus block w-full p-1"
+            />
+            <div {...getErrorProps('title')} id={fields.title.errorId}>
+              {fields.title.errors}
+            </div>
+          </div>
+          <div>
+            <label {...labelProps} htmlFor={fields.body.id}>
+              Description
+            </label>
+            <textarea
+              rows={10}
+              className="textarea textarea-bordered bg-base-200 focus:outline-secondary-focus w-full"
+              {...getTextareaProps(fields.body)}
+            />
+            <div {...getErrorProps('body')} id={fields.body.errorId}>
+              {fields.body.errors}
+            </div>
+          </div>
+          <button className="btn btn-lg btn-secondary btn-block mt-4">
+            {isNew ? 'Create' : 'Update'}
+          </button>
+        </Form>
       </div>
-      <div>
-        <label {...labelProps} htmlFor={fields.body.id}>
-          Description
-        </label>
-        <textarea
-        rows={10}
-          className="textarea textarea-bordered bg-base-200 focus:outline-secondary-focus w-full"
-          {...getTextareaProps(fields.body)}
-        />
-        <div {...getErrorProps('body')} id={fields.body.errorId}>
-          {fields.body.errors}
-        </div>
-      </div>
-      <button className="btn btn-lg btn-secondary btn-block mt-4">{isNew?'Create':'Update'}</button>
-    </Form>
     </>
   )
 }

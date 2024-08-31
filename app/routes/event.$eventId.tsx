@@ -35,14 +35,20 @@ export default function EventPage() {
 
   return (
     <div>
-      <h1 className="not-prose font-extrabold text-2xl text-base-content">{event.title}</h1>
-      <div>{event.body}</div>
-      <img
-        alt={event.title}
-        className="h-[128px]"
-        src={`/event-qr/${event.id}.svg`}
-      />
-      <Link to={`/events/upsert/${event.id}`}>{'Update event'}</Link>
+      <h1 className="not-prose font-extrabold text-2xl text-base-content">
+        {event.title}
+      </h1>
+      <div className="prose whitespace-pre-line">
+        <div className="float-right not-prose p-1 pr-0 text-center">
+          <img
+            alt={event.title}
+            className="h-[128px]"
+            src={`/event-qr/${event.id}.svg`}
+          />
+          <Link to={`/events/upsert/${event.id}`}>{'Update event'}</Link>
+        </div>
+        {event.body}
+      </div>
     </div>
   )
 }
