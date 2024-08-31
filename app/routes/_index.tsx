@@ -36,9 +36,9 @@ export default function Index() {
         Welcome to Remix
       </h1>
       {data.events.map(event => (
-        
-          <li key={event.id}>{event.title}</li>
-        
+        <li key={event.id}>
+          <Link className="text-secondary font-extrabold" to={`/event/${event.id}`}>{event.title}</Link>
+        </li>
       ))}
     </div>
   )
