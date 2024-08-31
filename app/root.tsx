@@ -40,7 +40,7 @@ const NavBar = () => {
           </Link>
         </div>
         <div className="flex-none gap-2 mr-2 text-base-content">
-          <Link className='text-primary' to={'/events/upsert'}>{'Create event'}</Link>
+          <Link className='text-secondary font-extrabold' to={'/events/upsert'}>{'Create event'}</Link>
         </div>
         <div className="flex-none gap-2">
           <SignedIn>
