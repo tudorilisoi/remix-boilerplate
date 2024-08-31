@@ -44,7 +44,7 @@ module.exports = {
 
     // NOTE see https://daisyui.com/theme-generator/
     themes: [
-      // "business",
+      "garden",
       {
         "e3-dark": {
           "color-scheme": "dark",

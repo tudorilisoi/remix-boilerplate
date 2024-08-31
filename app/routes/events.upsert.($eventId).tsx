@@ -129,17 +129,18 @@ export default function UpsertEvent() {
         <label {...labelProps} htmlFor={fields.title.id}>
           Title
         </label>
-        <input {...getInputProps(fields.title, { type: 'text' })} />
+        <input {...getInputProps(fields.title, { type: 'text' })} className="input-bordered bg-base-200 focus:outline-secondary-focus block w-full p-1" />
         <div {...getErrorProps('title')} id={fields.title.errorId}>
           {fields.title.errors}
         </div>
       </div>
       <div>
         <label {...labelProps} htmlFor={fields.body.id}>
-          Message
+          Description
         </label>
         <textarea
-          className="textarea textarea-bordered bg-base-200 focus:outline-secondary-focus"
+        rows={10}
+          className="textarea textarea-bordered bg-base-200 focus:outline-secondary-focus w-full"
           {...getTextareaProps(fields.body)}
         />
         <div {...getErrorProps('body')} id={fields.body.errorId}>

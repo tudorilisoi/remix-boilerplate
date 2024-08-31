@@ -28,7 +28,7 @@ const NavBar = () => {
   // NOTE for the bg highlight the container
   return (
     <header className="fix-scroll bg-base-200 shadow-lg">
-      <div className="navbar container mx-auto px-6 py-4">
+      <div className="navbar container mx-auto px-6 py-2">
         <div className="flex-1">
           <Link to={'/'}>
             {/* <span className="btn btn-circle btn-primary normal-case">e3</span> */}
@@ -40,7 +40,7 @@ const NavBar = () => {
           </Link>
         </div>
         <div className="flex-none gap-2 mr-2 text-base-content">
-          <Link to={'/events/upsert'}>{'Create event'}</Link>
+          <Link className='text-primary' to={'/events/upsert'}>{'Create event'}</Link>
         </div>
         <div className="flex-none gap-2">
           <SignedIn>
@@ -92,7 +92,7 @@ export function XLayout({ children }: { children: React.ReactNode }) {
               <p className="text-base-content font-extrabold flex">
                 <span className="mr-2">© {new Date().getFullYear()}</span>
                 <Link className="mr-2" to={'/'}>
-                  {'REvents'}
+                  {'Revent'}
                 </Link>
                 <Link to={'/events/upsert'}>{'Create event'}</Link>
               </p>
