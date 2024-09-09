@@ -95,7 +95,7 @@ export function XLayout({ children }: { children: React.ReactNode }) {
   const [m, setM] = useState('No message')
   const [s, setS] = useState(-1)
   useEffect(() => {
-    if ((flash.seq || 0) !== s && flash.info !== m && flash.info) {
+    if ((flash.seq || 0) !== s || (flash.info !== m && flash.info)) {
       setM(flash.info)
       console.log(`🚀 ~ XLayout ~ message:`, flash.info)
     } else {
@@ -103,6 +103,9 @@ export function XLayout({ children }: { children: React.ReactNode }) {
       setM('No message')
     }
     setS(flash.seq)
+    return () => {
+      console.log('Unmount')
+    }
   }, [flash.seq, flash, s])
   // console.log(`🚀 ~ XLayout ~ data:`, data)
   return (
