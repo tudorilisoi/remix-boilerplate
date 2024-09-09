@@ -86,8 +86,8 @@ function Toast({ message, time = 3000 }: { message: string; time?: number }) {
       leaveFrom="opacity-100"
       leaveTo="opacity-0"
     >
-      <div className="toast toast-top toast-center p-2">
-        <div className="alert alert-info">
+      <div className="toast toast-top toast-center">
+        <div className="alert alert-info !p-1 !px-2 rounded-md !text-center">
           <span>{message}</span>
         </div>
       </div>
