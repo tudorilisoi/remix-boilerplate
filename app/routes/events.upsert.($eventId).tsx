@@ -20,9 +20,9 @@ import {
   updateEvent,
 } from '~/services/events/events.server'
 
-import { eventCreateSchema, eventUpdateSchema } from '~/services/events/events'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-import { commitSession, getSession } from '~/lib/sessions'
+import { redirectWithToast } from 'remix-toast'
+import { eventCreateSchema, eventUpdateSchema } from '~/services/events/events'
 
 export async function loader(args: LoaderFunctionArgs) {
   const userId = await getUserId(args)
@@ -52,7 +52,7 @@ export async function loader(args: LoaderFunctionArgs) {
 
 export async function action(args: ActionFunctionArgs) {
   const { request } = args
-  let { eventId } = args.params
+  const { eventId } = args.params
   const schema = eventId ? eventUpdateSchema : eventCreateSchema
   const userId = await getUserId(args)
   const formData = await request.formData()
@@ -61,25 +61,19 @@ export async function action(args: ActionFunctionArgs) {
   if (submission.status !== 'success') {
     return json(submission.reply())
   }
+  let event, message
 
   try {
-    const session = await getSession(args.request.headers.get('Cookie'))
     if (eventId) {
-      await updateEvent({ ...submission.value, userId, id: eventId })
-      session.flash('info', 'updated')
-     
-      // return redirect(`/event/${eventId}`)
+      event = await updateEvent({ ...submission.value, userId, id: eventId })
+      message = `${event.title} updated`
     } else {
-      const { id } = await createEvent({ ...submission.value, userId })
-      eventId = id
-      session.flash('info', 'created')
-      // return redirect(`/event/${newEvent.id}`)
+      event = await createEvent({ ...submission.value, userId })
+      message = `${event.title} updated`
     }
-    // session.flash('info', 'Deleted')
-    return redirect(`/event/${eventId}`, {
-      headers: {
-        'Set-Cookie': await commitSession(session),
-      },
+    return redirectWithToast(`/event/${event.id}`, {
+      type: 'info',
+      message: `${message}`,
     })
   } catch (error) {
     let message = 'Failed to save. Please try again later.'

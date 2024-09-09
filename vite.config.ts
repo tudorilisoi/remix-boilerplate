@@ -27,5 +27,8 @@ export default defineConfig({
       '@conform-to/react',
       'zod',
     ],
+    exclude:[
+      '@tailwindui/react'
+    ],
   },
 })

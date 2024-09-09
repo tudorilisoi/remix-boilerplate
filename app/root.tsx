@@ -12,36 +12,19 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from '@remix-run/react'
+import { Transition } from '@tailwindui/react'
+import { useEffect, useState } from 'react'
+import { getToast } from 'remix-toast'
 import logo from '~/assets/revent-logo.svg'
 import '~/css/fonts.css'
 import '~/css/init.css'
 import stylesheet from '~/css/tailwind.css?url'
-import { commitSession, getSession } from './lib/sessions'
-import { useEffect, useState } from 'react'
 
 export const loader: LoaderFunction = async args => {
-  const session = await getSession(args.request.headers.get('Cookie'))
-  const info = session.get('info')
-  const seq = (session.get('seq') || 0) + 1
-  session.flash('seq', seq)
-  console.log(`🚀 ~ info:`, info)
-  const error = session.get('error')
   return rootAuthLoader(args, async () => {
     // Add logic to fetch data
-    return json(
-      {
-        flash: {
-          info,
-          error,
-          seq,
-        },
-      },
-      {
-        headers: {
-          'Set-Cookie': await commitSession(session),
-        },
-      },
-    )
+    const { toast, headers } = await getToast(args.request)
+    return json({ toast }, { headers })
   })
 }
 
@@ -84,30 +67,40 @@ const NavBar = () => {
   )
 }
 
+// see https://www.jacobparis.com/content/remix-form-toast
+function Toast({ message, time = 3000 }: { message: string; time?: number }) {
+  const [show, setShow] = useState(true)
+  useEffect(() => {
+    const timeout = setTimeout(() => setShow(false), time)
+    return () => clearTimeout(timeout)
+  }, [])
+  return (
+    <Transition
+      show={show}
+      enter="transition-opacity duration-300"
+      enterFrom="opacity-0"
+      enterTo="opacity-100"
+      leave="transition-opacity duration-300"
+      leaveFrom="opacity-100"
+      leaveTo="opacity-0"
+    >
+      <div className="toast toast-top toast-center p-2">
+        <div className="alert alert-info">
+          <span>{message}</span>
+        </div>
+      </div>
+    </Transition>
+  )
+}
+
 // NOTE exporting this as Layout does not wrap with the ClerkApp
 
 export function XLayout({ children }: { children: React.ReactNode }) {
   // NOTE extensions, Adsense et. al. manipulate the document
   // so using suppressHydrationWarning workaround
-  const data = useLoaderData<typeof loader>()
-  console.log(`🚀 ~ XLayout ~ data:`, data.flash)
-  const flash = data.flash
-  const [m, setM] = useState('No message')
-  const [s, setS] = useState(-1)
-  useEffect(() => {
-    if ((flash.seq || 0) !== s || (flash.info !== m && flash.info)) {
-      setM(flash.info)
-      console.log(`🚀 ~ XLayout ~ message:`, flash.info)
-    } else {
-      console.log('CLEAR MSG')
-      setM('No message')
-    }
-    setS(flash.seq)
-    return () => {
-      console.log('Unmount')
-    }
-  }, [flash.seq, flash, s])
-  // console.log(`🚀 ~ XLayout ~ data:`, data)
+
+  const { toast } = useLoaderData<typeof loader>()
+  console.log(`🚀 ~ XLayout ~ toast:`, toast)
   return (
     <html lang="ro_RO" suppressHydrationWarning>
       <head suppressHydrationWarning>
@@ -120,6 +113,7 @@ export function XLayout({ children }: { children: React.ReactNode }) {
         <div className="flex flex-col min-h-screen w-full bg-base-100">
           {/* Top Navigation Header */}
           <NavBar />
+          {toast ? <Toast key={toast.message} message={toast.message} /> : null}
 
           {/* Main Content; NOTE: flex-grow flex flex-col inherits height */}
           <div className={' flex-grow flex flex-col fix-scroll'}>
