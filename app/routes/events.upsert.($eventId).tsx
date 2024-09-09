@@ -69,7 +69,7 @@ export async function action(args: ActionFunctionArgs) {
       message = `${event.title} updated`
     } else {
       event = await createEvent({ ...submission.value, userId })
-      message = `${event.title} updated`
+      message = `${event.title} created`
     }
     return redirectWithToast(`/event/${event.id}`, {
       type: 'info',
