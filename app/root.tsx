@@ -114,6 +114,12 @@ export function XLayout({ children }: { children: React.ReactNode }) {
         <div className="flex flex-col min-h-screen w-full bg-base-100">
           {/* Top Navigation Header */}
           <NavBar />
+
+          {/* 
+          Using req time as a key prevents old toasts hanging because 
+          if the request is stale the toast will be hidden by its inner state
+          */
+          }
           <ClientOnly fallback={null}>
             {() =>
               toast ? <Toast key={time} message={toast.message} /> : null
