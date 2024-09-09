@@ -19,12 +19,13 @@ import logo from '~/assets/revent-logo.svg'
 import '~/css/fonts.css'
 import '~/css/init.css'
 import stylesheet from '~/css/tailwind.css?url'
+import { useStore } from './lib/useStore'
 
 export const loader: LoaderFunction = async args => {
   return rootAuthLoader(args, async () => {
     // Add logic to fetch data
     const { toast, headers } = await getToast(args.request)
-    return json({ toast }, { headers })
+    return json({ toast, time:new Date().getTime() }, { headers })
   })
 }
 
@@ -67,6 +68,7 @@ const NavBar = () => {
   )
 }
 
+
 // see https://www.jacobparis.com/content/remix-form-toast
 function Toast({ message, time = 3000 }: { message: string; time?: number }) {
   const [show, setShow] = useState(true)
@@ -75,7 +77,7 @@ function Toast({ message, time = 3000 }: { message: string; time?: number }) {
     return () => clearTimeout(timeout)
   }, [])
   return (
-    <Transition
+    <Transition 
       show={show}
       enter="transition-opacity duration-300"
       enterFrom="opacity-0"
@@ -98,9 +100,8 @@ function Toast({ message, time = 3000 }: { message: string; time?: number }) {
 export function XLayout({ children }: { children: React.ReactNode }) {
   // NOTE extensions, Adsense et. al. manipulate the document
   // so using suppressHydrationWarning workaround
-
-  const { toast } = useLoaderData<typeof loader>()
-  console.log(`🚀 ~ XLayout ~ toast:`, toast)
+  const { toast, time } = useLoaderData<typeof loader>()
+  console.log(`🚀 ~ XLayout ~ toast:`, toast,  time)
   return (
     <html lang="ro_RO" suppressHydrationWarning>
       <head suppressHydrationWarning>
@@ -113,7 +114,7 @@ export function XLayout({ children }: { children: React.ReactNode }) {
         <div className="flex flex-col min-h-screen w-full bg-base-100">
           {/* Top Navigation Header */}
           <NavBar />
-          {toast ? <Toast key={toast.message} message={toast.message} /> : null}
+          {toast ? <Toast key={time} message={toast.message} /> : null}
 
           {/* Main Content; NOTE: flex-grow flex flex-col inherits height */}
           <div className={' flex-grow flex flex-col fix-scroll'}>
