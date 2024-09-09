@@ -67,6 +67,7 @@ export async function action(args: ActionFunctionArgs) {
     if (eventId) {
       await updateEvent({ ...submission.value, userId, id: eventId })
       session.flash('info', 'updated')
+     
       // return redirect(`/event/${eventId}`)
     } else {
       const { id } = await createEvent({ ...submission.value, userId })

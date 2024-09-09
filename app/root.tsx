@@ -17,10 +17,13 @@ import '~/css/fonts.css'
 import '~/css/init.css'
 import stylesheet from '~/css/tailwind.css?url'
 import { commitSession, getSession } from './lib/sessions'
+import { useEffect, useState } from 'react'
 
 export const loader: LoaderFunction = async args => {
   const session = await getSession(args.request.headers.get('Cookie'))
   const info = session.get('info')
+  const seq = (session.get('seq') || 0) + 1
+  session.flash('seq', seq)
   console.log(`🚀 ~ info:`, info)
   const error = session.get('error')
   return rootAuthLoader(args, async () => {
@@ -30,6 +33,7 @@ export const loader: LoaderFunction = async args => {
         flash: {
           info,
           error,
+          seq,
         },
       },
       {
@@ -87,6 +91,19 @@ export function XLayout({ children }: { children: React.ReactNode }) {
   // so using suppressHydrationWarning workaround
   const data = useLoaderData<typeof loader>()
   console.log(`🚀 ~ XLayout ~ data:`, data.flash)
+  const flash = data.flash
+  const [m, setM] = useState('No message')
+  const [s, setS] = useState(-1)
+  useEffect(() => {
+    if ((flash.seq || 0) !== s && flash.info !== m && flash.info) {
+      setM(flash.info)
+      console.log(`🚀 ~ XLayout ~ message:`, flash.info)
+    } else {
+      console.log('CLEAR MSG')
+      setM('No message')
+    }
+    setS(flash.seq)
+  }, [flash.seq, flash, s])
   // console.log(`🚀 ~ XLayout ~ data:`, data)
   return (
     <html lang="ro_RO" suppressHydrationWarning>
