@@ -16,21 +16,28 @@ import logo from '~/assets/revent-logo.svg'
 import '~/css/fonts.css'
 import '~/css/init.css'
 import stylesheet from '~/css/tailwind.css?url'
-import { getSession } from './lib/sessions'
+import { commitSession, getSession } from './lib/sessions'
 
 export const loader: LoaderFunction = async args => {
   const session = await getSession(args.request.headers.get('Cookie'))
   const info = session.get('info')
+  console.log(`🚀 ~ info:`, info)
   const error = session.get('error')
-  console.log(`🚀 ~ constloader:LoaderFunction= ~ info:`, info)
   return rootAuthLoader(args, async () => {
     // Add logic to fetch data
-    return {
-      flash: {
-        info,
-        error,
+    return json(
+      {
+        flash: {
+          info,
+          error,
+        },
       },
-    }
+      {
+        headers: {
+          'Set-Cookie': await commitSession(session),
+        },
+      },
+    )
   })
 }
 
@@ -79,7 +86,7 @@ export function XLayout({ children }: { children: React.ReactNode }) {
   // NOTE extensions, Adsense et. al. manipulate the document
   // so using suppressHydrationWarning workaround
   const data = useLoaderData<typeof loader>()
-  console.log(`🚀 ~ XLayout ~ data:`, data)
+  console.log(`🚀 ~ XLayout ~ data:`, data.flash)
   // console.log(`🚀 ~ XLayout ~ data:`, data)
   return (
     <html lang="ro_RO" suppressHydrationWarning>

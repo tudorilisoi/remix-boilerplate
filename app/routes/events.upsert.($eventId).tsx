@@ -22,6 +22,7 @@ import {
 
 import { eventCreateSchema, eventUpdateSchema } from '~/services/events/events'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
+import { commitSession, getSession } from '~/lib/sessions'
 
 export async function loader(args: LoaderFunctionArgs) {
   const userId = await getUserId(args)
@@ -51,7 +52,7 @@ export async function loader(args: LoaderFunctionArgs) {
 
 export async function action(args: ActionFunctionArgs) {
   const { request } = args
-  const { eventId } = args.params
+  let { eventId } = args.params
   const schema = eventId ? eventUpdateSchema : eventCreateSchema
   const userId = await getUserId(args)
   const formData = await request.formData()
@@ -62,13 +63,23 @@ export async function action(args: ActionFunctionArgs) {
   }
 
   try {
+    const session = await getSession(args.request.headers.get('Cookie'))
     if (eventId) {
       await updateEvent({ ...submission.value, userId, id: eventId })
-      return redirect(`/event/${eventId}`)
+      session.flash('info', 'updated')
+      // return redirect(`/event/${eventId}`)
     } else {
-      const newEvent = await createEvent({ ...submission.value, userId })
-      return redirect(`/event/${newEvent.id}`)
+      const { id } = await createEvent({ ...submission.value, userId })
+      eventId = id
+      session.flash('info', 'created')
+      // return redirect(`/event/${newEvent.id}`)
     }
+    // session.flash('info', 'Deleted')
+    return redirect(`/event/${eventId}`, {
+      headers: {
+        'Set-Cookie': await commitSession(session),
+      },
+    })
   } catch (error) {
     let message = 'Failed to save. Please try again later.'
     if (error instanceof PrismaClientKnownRequestError) {
