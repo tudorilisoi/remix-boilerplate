@@ -2,21 +2,37 @@
 import { enUS } from '@clerk/localizations'
 import { ClerkApp, SignedIn, SignedOut, UserButton } from '@clerk/remix'
 import { rootAuthLoader } from '@clerk/remix/ssr.server'
-import { LinksFunction, LoaderFunction } from '@remix-run/node'
+import { json, LinksFunction, LoaderFunction } from '@remix-run/node'
 import {
   Link,
   Links,
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration
+  ScrollRestoration,
+  useLoaderData,
 } from '@remix-run/react'
 import logo from '~/assets/revent-logo.svg'
 import '~/css/fonts.css'
 import '~/css/init.css'
 import stylesheet from '~/css/tailwind.css?url'
+import { getSession } from './lib/sessions'
 
-export const loader: LoaderFunction = args => rootAuthLoader(args)
+export const loader: LoaderFunction = async args => {
+  const session = await getSession(args.request.headers.get('Cookie'))
+  const info = session.get('info')
+  const error = session.get('error')
+  console.log(`🚀 ~ constloader:LoaderFunction= ~ info:`, info)
+  return rootAuthLoader(args, async () => {
+    // Add logic to fetch data
+    return {
+      flash: {
+        info,
+        error,
+      },
+    }
+  })
+}
 
 // export const ErrorBoundary = ClerkErrorBoundary()
 
@@ -40,7 +56,9 @@ const NavBar = () => {
           </Link>
         </div>
         <div className="flex-none gap-2 mr-2 text-base-content">
-          <Link className='text-secondary font-extrabold' to={'/events/upsert'}>{'Create event'}</Link>
+          <Link className="text-secondary font-extrabold" to={'/events/upsert'}>
+            {'Create event'}
+          </Link>
         </div>
         <div className="flex-none gap-2">
           <SignedIn>
@@ -60,6 +78,9 @@ const NavBar = () => {
 export function XLayout({ children }: { children: React.ReactNode }) {
   // NOTE extensions, Adsense et. al. manipulate the document
   // so using suppressHydrationWarning workaround
+  const data = useLoaderData<typeof loader>()
+  console.log(`🚀 ~ XLayout ~ data:`, data)
+  // console.log(`🚀 ~ XLayout ~ data:`, data)
   return (
     <html lang="ro_RO" suppressHydrationWarning>
       <head suppressHydrationWarning>

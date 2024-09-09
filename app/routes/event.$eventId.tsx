@@ -1,4 +1,3 @@
-import { getAuth } from '@clerk/remix/ssr.server'
 import {
   ActionFunctionArgs,
   json,
@@ -7,6 +6,7 @@ import {
   type MetaFunction,
 } from '@remix-run/node'
 import { Form, Link, useLoaderData } from '@remix-run/react'
+import { commitSession, getSession } from '~/lib/sessions'
 import { getUserId } from '~/services/auth.server'
 import { deleteEvent, getEvent } from '~/services/events/events.server'
 
@@ -26,7 +26,14 @@ export async function action(args: ActionFunctionArgs) {
   if (eventId && userId) {
     try {
       await deleteEvent({ id: eventId, userId })
-      return redirect(`/`)
+      // const session = await getSession()
+      const session = await getSession(args.request.headers.get("Cookie"));
+      session.flash('info', 'Deleted')
+      return redirect(`/`, {
+        headers: {
+          'Set-Cookie': await commitSession(session),
+        },
+      })
     } catch (error) {
       throw new Response('Server error', { status: 500 })
     }

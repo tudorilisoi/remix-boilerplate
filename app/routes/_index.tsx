@@ -9,8 +9,8 @@ import { getEvents } from '~/services/events/events.server'
 
 export const meta: MetaFunction = () => {
   return [
-    { title: 'New Remix App' },
-    { name: 'description', content: 'Welcome to Remix!' },
+    { title: 'Revent app' },
+    { name: 'description', content: 'Revent' },
   ]
 }
 
@@ -32,7 +32,7 @@ export default function Index() {
   return (
     <div>
       <h1 className="not-prose font-extrabold text-2xl text-base-content">
-        Welcome to Remix
+        Revent home page
       </h1>
       {data.events.map(event => (
         <li key={event.id}>
