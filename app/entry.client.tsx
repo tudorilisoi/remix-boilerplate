@@ -47,7 +47,7 @@ function clearBrowserExtensionInjectionsBeforeHydration() {
 
 
 startTransition(() => {
-  // clearBrowserExtensionInjectionsBeforeHydration()
+  clearBrowserExtensionInjectionsBeforeHydration()
   hydrateRoot(
     document,
     <StrictMode>
