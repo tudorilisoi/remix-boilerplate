@@ -1,6 +1,8 @@
 // see https://www.tailwind-kit.com/started
 
 import plugin from "tailwindcss/plugin"
+import typography from "@tailwindcss/typography"
+import daisyui from "daisyui"
 
 const textShadowPlugin = plugin(function ({ matchUtilities, theme }) {
   matchUtilities(
@@ -62,7 +64,7 @@ module.exports = {
       },
     ],
   },
-  plugins: [textShadowPlugin, require("@tailwindcss/typography"), require("daisyui")],
+  plugins: [textShadowPlugin, typography, daisyui],
   future: {
     purgeLayersByDefault: true,
   },

@@ -118,7 +118,7 @@ export default function UpsertEvent() {
   }
   type fieldKeys = keyof typeof fields
   const getErrorProps = (fieldName: fieldKeys) => {
-    return fields[fieldName].errors ? errorProps : {}
+    return fields[fieldName as string].errors ? errorProps : {}
   }
   const isNew = !data.eventId
 
